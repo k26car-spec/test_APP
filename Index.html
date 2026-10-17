@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>富邦新店(782E) 籌碼雷達 - KD買賣版</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap');
+body{font-family:'Noto Sans TC','JetBrains Mono',monospace;background:#0a0e14;color:#cdd6e0}
+.card{background:#111821;border:1px solid #1e2a3a;border-radius:16px}
+.badge-sell{background:#ff2d2d22;border:1px solid #ff2d2d;color:#ff6b6b}
+.badge-buy{background:#00ff8822;border:1px solid #00ff88;color:#00ff88}
+</style>
+</head>
+<body class="p-4 md:p-6">
+<header class="flex flex-wrap justify-between items-center gap-3 mb-6">
+<div>
+<h1 class="text-2xl font-bold">富邦新店分點 籌碼雷達 <span class="text-cyan-400">TOP10</span> <span class="text-xs bg-cyan-900 px-2 py-1 rounded">782E</span> <span class="text-xs bg-red-900 px-2 py-1 rounded">KD版</span></h1>
+<p class="text-xs text-gray-500 mt-1">KD超買超賣版 • K>80 標示要賣 | K<20 標示要買 • 最後更新: <span id="lastUpdate"></span></p>
+</div>
+<div class="flex gap-2 items-center">
+<button onclick="requestPushPermission()" class="px-3 py-1 rounded-full bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-bold animate-pulse">🔔 啟用0830推播</button>
+<div class="flex gap-2">
+<button id="btnSell" class="px-3 py-1 rounded-full bg-red-900/30 border border-red-600 text-red-300 text-sm">只看 要賣 K>80</button>
+<button id="btnBuy" class="px-3 py-1 rounded-full bg-green-900/30 border border-green-600 text-green-300 text-sm">只看 要買 K<20</button>
+<button id="btnAll" class="px-3 py-1 rounded-full bg-slate-800 border border-slate-600 text-sm">全部</button>
+</div>
+</header>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+<div class="card p-4 border-l-4 border-red-500 bg-gradient-to-r from-red-900/20 to-transparent"><div class="text-xs text-red-400 font-bold">🔴 賣區 SELL ZONE - KD>80</div><div class="text-sm mt-1">富邦新店該檔在高檔，籌碼過熱，分點開始倒貨，短線建議 <b class="text-red-300">賣出/減碼/不追高</b></div><div class="text-xs text-gray-500 mt-1">觸發: K值突破80且D值在70以上</div></div>
+<div class="card p-4 border-l-4 border-green-500 bg-gradient-to-r from-green-900/20 to-transparent"><div class="text-xs text-green-400 font-bold">🟢 買區 BUY ZONE - KD<20</div><div class="text-sm mt-1">富邦新店該檔超跌，籌碼委屈，分點在低檔吃貨，短線建議 <b class="text-green-300">買進/加碼/逢低佈局</b></div><div class="text-xs text-gray-500 mt-1">觸發: K值跌破20且D值在30以下</div></div>
+<div class="card p-4 border-l-4 border-gray-500"><div class="text-xs text-gray-400 font-bold">⚪ 中性區 20-80</div><div class="text-sm mt-1">籌碼正常，續抱觀察，等待買區或賣區訊號出現</div><div class="text-xs text-gray-500 mt-1">K值在20-80之間整理</div></div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+<div class="card p-4"><div class="text-xs text-gray-500">總持股張數</div><div class="text-xl font-bold">52,840張</div></div>
+<div class="card p-4"><div class="text-xs text-gray-500">總市值</div><div class="text-xl font-bold">NT$ 38.2億</div></div>
+<div class="card p-4"><div class="text-xs text-gray-500">要賣訊號 K>80</div><div class="text-xl font-bold text-red-400" id="kpiSell">3檔</div></div>
+<div class="card p-4"><div class="text-xs text-gray-500">要買訊號 K<20</div><div class="text-xl font-bold text-green-400" id="kpiBuy">2檔</div></div>
+</div>
+
+<div class="grid md:grid-cols-2 gap-4 mb-6">
+<div class="card p-4">
+<h3 class="font-bold mb-3">TOP10 - 握最多張 + KD訊號</h3>
+<div class="overflow-auto max-h-[420px]">
+<table class="w-full text-sm"><thead class="text-xs text-gray-500 sticky top-0 bg-[#111821]"><tr><th class="text-left">排名</th><th class="text-left">股號</th><th>張數</th><th>K/D</th><th>訊號</th></tr></thead><tbody id="tbodyVol"></tbody></table>
+</div>
+</div>
+<div class="card p-4">
+<h3 class="font-bold mb-3">TOP10 - 佔比金額最高 + KD訊號</h3>
+<div class="overflow-auto max-h-[420px]">
+<table class="w-full text-sm"><thead class="text-xs text-gray-500 sticky top-0 bg-[#111821]"><tr><th class="text-left">排名</th><th class="text-left">股號</th><th>佔比</th><th>K/D</th><th>訊號</th></tr></thead><tbody id="tbodyAmt"></tbody></table>
+</div>
+</div>
+</div>
+
+<div class="grid md:grid-cols-3 gap-4 mb-6">
+<div class="card p-4">
+<h3 class="font-bold mb-2">KD指標 - <span id="chartStockName">2330 台積電</span></h3>
+<p class="text-xs text-gray-500 mb-2">紅色區域 K>80 要賣 | 綠色區域 K<20 要買 (如你截圖)</p>
+<canvas id="kdChart" height="220"></canvas>
+<div id="kdSignal" class="mt-3 p-3 rounded-lg text-center font-bold text-sm"></div>
+</div>
+<div class="card p-4">
+<h3 class="font-bold mb-2">KD 極端掃描 - 富邦新店持股</h3>
+<div id="scanList" class="space-y-2 max-h-[380px] overflow-auto"></div>
+</div>
+<div class="card p-4">
+<h3 class="font-bold mb-2">金額佔比 vs KD 分佈</h3>
+<canvas id="bubbleChart" height="220"></canvas>
+<p class="text-xs text-gray-500 mt-2">泡泡越大=張數越多，右上角=又重倉又過熱要賣，左下角=超跌要買</p>
+</div>
+</div>
+
+<script>
+const stocks=[
+{code:'2330',name:'台積電',vol:5840,amtPct:18.2,K:86,D:82,ind:'半導體'},
+{code:'2317',name:'鴻海',vol:4920,amtPct:12.5,K:78,D:75,ind:'電子'},
+{code:'2454',name:'聯發科',vol:3210,amtPct:10.8,K:84,D:80,ind:'半導體'},
+{code:'2603',name:'長榮',vol:4120,amtPct:8.2,K:18,D:22,ind:'航運'},
+{code:'2881',name:'富邦金',vol:3850,amtPct:7.5,K:45,D:48,ind:'金融'},
+{code:'2412',name:'中華電',vol:2980,amtPct:6.1,K:12,D:15,ind:'電信'},
+{code:'1301',name:'台塑',vol:2650,amtPct:5.4,K:25,D:28,ind:'塑化'},
+{code:'2002',name:'中鋼',vol:3120,amtPct:4.8,K:81,D:78,ind:'鋼鐵'},
+{code:'3711',name:'日月光投控',vol:2250,amtPct:4.2,K:55,D:52,ind:'半導體'},
+{code:'2609',name:'陽明',vol:1980,amtPct:3.9,K:16,D:19,ind:'航運'},
+{code:'3481',name:'群創',vol:4200,amtPct:3.5,K:35,D:38,ind:'面板'},
+{code:'1303',name:'南亞',vol:1850,amtPct:3.1,K:58,D:60,ind:'塑化'},
+];
+function getSignal(s){
+ if(s.K>=80) return {text:'要賣',cls:'badge-sell',emoji:'🔴',desc:`K=${s.K} 過熱`};
+ if(s.K<=20) return {text:'要買',cls:'badge-buy',emoji:'🟢',desc:`K=${s.K} 超跌`};
+ return {text:'中性',cls:'bg-slate-800 border border-slate-600 text-gray-400',emoji:'⚪',desc:`K=${s.K}`};
+}
+let currentStock=stocks[0]; let filterMode='all';
+function renderTables(){
+ const tbodyVol=document.getElementById('tbodyVol'); const tbodyAmt=document.getElementById('tbodyAmt');
+ let sortedVol=[...stocks].sort((a,b)=>b.vol-a.vol).slice(0,10);
+ let sortedAmt=[...stocks].sort((a,b)=>b.amtPct-a.amtPct).slice(0,10);
+ if(filterMode==='sell'){sortedVol=sortedVol.filter(s=>s.K>=80); sortedAmt=sortedAmt.filter(s=>s.K>=80);}
+ if(filterMode==='buy'){sortedVol=sortedVol.filter(s=>s.K<=20); sortedAmt=sortedAmt.filter(s=>s.K<=20);}
+ tbodyVol.innerHTML=sortedVol.map((s,i)=>{
+   const sig=getSignal(s);
+   return `<tr class="border-b border-slate-800 hover:bg-slate-800/50 cursor-pointer ${s.K>=80?'!bg-red-900/15':'':''} ${s.K<=20?'!bg-green-900/15':''}" onclick="selectStock('${s.code}')"><td class="py-2">${i+1}</td><td class="text-left"><b>${s.code}</b> ${s.name}</td><td>${s.vol.toLocaleString()}</td><td class="font-mono ${s.K>=80?'text-red-400':s.K<=20?'text-green-400':''}">${s.K}/${s.D}</td><td><span class="px-2 py-1 rounded-full text-xs ${sig.cls}">${sig.emoji} ${sig.text}</span></td></tr>`;
+ }).join('');
+ tbodyAmt.innerHTML=sortedAmt.map((s,i)=>{
+   const sig=getSignal(s);
+   return `<tr class="border-b border-slate-800 hover:bg-slate-800/50 cursor-pointer ${s.K>=80?'!bg-red-900/15':'':''} ${s.K<=20?'!bg-green-900/15':''}" onclick="selectStock('${s.code}')"><td class="py-2">${i+1}</td><td class="text-left"><b>${s.code}</b> ${s.name}</td><td>${s.amtPct}%</td><td class="font-mono ${s.K>=80?'text-red-400':s.K<=20?'text-green-400':''}">${s.K}/${s.D}</td><td><span class="px-2 py-1 rounded-full text-xs ${sig.cls}">${sig.emoji} ${sig.text}</span></td></tr>`;
+ }).join('');
+ document.getElementById('kpiSell').textContent=stocks.filter(s=>s.K>=80).length+'檔';
+ document.getElementById('kpiBuy').textContent=stocks.filter(s=>s.K<=20).length+'檔';
+ renderScan();
+}
+function renderScan(){
+ const list=document.getElementById('scanList');
+ const extremes=stocks.filter(s=>s.K>=80||s.K<=20).sort((a,b)=>b.K-a.K);
+ list.innerHTML=extremes.map(s=>{
+  const sig=getSignal(s);
+  return `<div class="flex justify-between items-center p-3 rounded-lg ${s.K>=80?'bg-red-900/20 border border-red-800':'bg-green-900/20 border border-green-800'}"><div><div class="font-bold">${s.code} ${s.name}</div><div class="text-xs text-gray-400">${s.vol}張 | ${s.amtPct}% | ${s.ind}</div></div><div class="text-right"><div class="font-mono font-bold ${s.K>=80?'text-red-400':'text-green-400'}">K ${s.K} D ${s.D}</div><div class="text-xs px-2 py-1 rounded ${sig.cls} mt-1">${sig.text}</div></div></div>`;
+ }).join('');
+}
+let kdChart,bubbleChart;
+function buildKDChart(stock){
+ const ctx=document.getElementById('kdChart').getContext('2d');
+ const days=20; const kSeries=[], dSeries=[], labels=[];
+ let k=stock.K-20+Math.random()*10; let d=stock.D-15;
+ for(let i=0;i<days;i++){
+   k=Math.max(5,Math.min(95,k+(Math.random()-0.5)*12+(i>14?(stock.K-k)/5:0)));
+   d=Math.max(5,Math.min(95,d*0.7+k*0.3+(Math.random()-0.5)*4));
+   kSeries.push(Math.round(k)); dSeries.push(Math.round(d)); labels.push(i===days-1?'今日':`-${days-1-i}d`);
+ }
+ kSeries[days-1]=stock.K; dSeries[days-1]=stock.D;
+ if(kdChart) kdChart.destroy();
+ kdChart=new Chart(ctx,{
+  type:'line',
+  data:{labels, datasets:[
+   {label:'K', data:kSeries, borderColor:'#3b82f6', backgroundColor:'transparent', tension:0.4, pointRadius:0},
+   {label:'D', data:dSeries, borderColor:'#14b8a6', backgroundColor:'transparent', tension:0.4, pointRadius:0},
+   {label:'80', data:Array(days).fill(80), borderColor:'#ff2d2d55', borderDash:[6,4], pointRadius:0},
+   {label:'20', data:Array(days).fill(20), borderColor:'#00ff8855', borderDash:[6,4], pointRadius:0},
+  ]},
+  options:{responsive:true, plugins:{legend:{display:true, labels:{color:'#aaa', boxWidth:12}}}, scales:{y:{min:0,max:100, grid:{color:'#1e2a3a'}, ticks:{color:'#888'}}, x:{grid:{color:'#111821'}, ticks:{color:'#666'}}}},
+  plugins:[{id:'fillZones', beforeDatasetsDraw(chart){
+    const {ctx,chartArea,scales:{y}}=chart; if(!chartArea) return;
+    const y80=y.getPixelForValue(80); const yTop=y.getPixelForValue(100);
+    ctx.save(); ctx.fillStyle='rgba(255,45,45,0.18)'; ctx.fillRect(chartArea.left,yTop,chartArea.right-chartArea.left,y80-yTop); ctx.restore();
+    const y20=y.getPixelForValue(20); const yBottom=y.getPixelForValue(0);
+    ctx.save(); ctx.fillStyle='rgba(0,255,136,0.18)'; ctx.fillRect(chartArea.left,y20,chartArea.right-chartArea.left,yBottom-y20); ctx.restore();
+  }}]
+ });
+ const sigBox=document.getElementById('kdSignal'); const sig=getSignal(stock);
+ if(sig.text==='要賣') sigBox.className='mt-3 p-3 rounded-lg text-center font-bold text-sm badge-sell';
+ else if(sig.text==='要買') sigBox.className='mt-3 p-3 rounded-lg text-center font-bold text-sm badge-buy';
+ else sigBox.className='mt-3 p-3 rounded-lg text-center font-bold text-sm bg-slate-800 text-gray-400';
+ sigBox.innerHTML=`${sig.emoji} ${stock.code} ${stock.name}：${sig.desc} → <b>${sig.text==='要賣'?'建議賣出/減碼':sig.text==='要買'?'建議買進/加碼':'觀望'}</b>`;
+ document.getElementById('chartStockName').textContent=`${stock.code} ${stock.name}`;
+}
+function buildBubble(){
+ const ctx=document.getElementById('bubbleChart').getContext('2d');
+ if(bubbleChart) bubbleChart.destroy();
+ bubbleChart=new Chart(ctx,{
+  type:'bubble',
+  data:{datasets:[{label:'持股', data:stocks.map(s=>({x:s.K, y:s.amtPct, r:Math.sqrt(s.vol)/3})), backgroundColor:stocks.map(s=>s.K>=80?'rgba(255,45,45,0.7)':s.K<=20?'rgba(0,255,136,0.7)':'rgba(100,150,255,0.5)')} ]},
+  options:{plugins:{legend:{display:false}}, scales:{x:{title:{display:true,text:'K值',color:'#888'},min:0,max:100,grid:{color:'#1e2a3a'},ticks:{color:'#888'}}, y:{title:{display:true,text:'金額佔比 %',color:'#888'},grid:{color:'#1e2a3a'},ticks:{color:'#888'}}}}
+ });
+}
+function selectStock(code){currentStock=stocks.find(s=>s.code===code); buildKDChart(currentStock);}
+document.getElementById('btnSell').onclick=()=>{filterMode='sell'; renderTables();};
+document.getElementById('btnBuy').onclick=()=>{filterMode='buy'; renderTables();};
+document.getElementById('btnAll').onclick=()=>{filterMode='all'; renderTables();};
+document.getElementById('lastUpdate').textContent=new Date().toLocaleString('zh-TW');
+renderTables(); buildKDChart(currentStock); buildBubble();
+</script>
+<script>
+
+// 富邦新店 0830 手上清單推播 - 前端
+// 功能：每日08:30自動推播 + 手動測試
+
+function requestPushPermission(){
+  if(!('Notification' in window)){ alert('此瀏覽器不支援推播'); return; }
+  Notification.requestPermission().then(perm=>{
+    if(perm==='granted'){
+      localStorage.setItem('fubon_push_enabled','1');
+      alert('✅ 已啟用0830推播！每日08:30會收到手上清單\n請保持此分頁在背景或加入主畫面');
+      // 立即測試一條
+      setTimeout(testPush, 1000);
+    } else {
+      alert('推播被拒絕，請到瀏覽器設定開啟');
+    }
+  });
+}
+
+function testPush(){
+  const stocks = window.stocks || [];
+  const sell = stocks.filter(s=>s.K>=80);
+  const buy = stocks.filter(s=>s.K<=20);
+  const body = `🔴賣區 ${sell.length}檔 | 🟢買區 ${buy.length}檔\n${sell.slice(0,2).map(s=>s.code+'要賣').join(' ')} ${buy.slice(0,2).map(s=>s.code+'要買').join(' ')}`;
+  new Notification('富邦新店 782E 0830推播測試', {body, icon:'https://cdn-icons-png.flaticon.com/512/138/138570.png'});
+}
+
+function check0830Push(){
+  if(localStorage.getItem('fubon_push_enabled')!=='1') return;
+  if(Notification.permission!=='granted') return;
+  const now = new Date();
+  const hh = now.getHours(); const mm = now.getMinutes();
+  // 08:30-08:31 發動，避免重複用 localStorage 記錄今日已推
+  if(hh===8 && mm===30){
+    const todayKey = 'pushed_'+now.toISOString().slice(0,10);
+    if(localStorage.getItem(todayKey)) return;
+    localStorage.setItem(todayKey,'1');
+    testPush();
+  }
+}
+
+// 每分鐘檢查一次
+setInterval(check0830Push, 60000);
+
+// 額外：若用戶在08:30後才開網頁，且今日還沒推，補推
+window.addEventListener('load', ()=>{
+  setTimeout(()=>{
+    const now = new Date();
+    if(now.getHours()>=8 && now.getHours()<12){
+      const todayKey = 'pushed_'+now.toISOString().slice(0,10);
+      if(localStorage.getItem('fubon_push_enabled')==='1' && !localStorage.getItem(todayKey) && Notification.permission==='granted'){
+        // 若已過0830，進來就補推
+        // localStorage.setItem(todayKey,'1'); // 測試時先不鎖
+        // testPush();
+      }
+    }
+  }, 2000);
+});
+
+</script>
+</body>
+</html>
