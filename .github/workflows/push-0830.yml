@@ -1,0 +1,13 @@
+name: 0830 手上清單推播
+on:
+  workflow_dispatch:
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 發推播
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" -d chat_id=${TELEGRAM_CHAT_ID} -d text="你的推播設定成功了！每天08:30會收到手上清單 https://k26car-spec.github.io/test_APP/"
