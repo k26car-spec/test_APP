@@ -1,0 +1,10 @@
+
+name: 0830 手上清單推播
+on:
+  schedule:
+    - cron: '30 0 * * 1-5'
+  workflow_dispatch:
+jobs:
+  push-holdings:
+    runs-on: ubuntu-latest
+    ...
