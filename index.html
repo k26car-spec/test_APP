@@ -89,6 +89,8 @@ const stocks=[
 {code:'3481',name:'群創',vol:4200,amtPct:3.5,K:35,D:38,ind:'面板'},
 {code:'1303',name:'南亞',vol:1850,amtPct:3.1,K:58,D:60,ind:'塑化'},
 ];
+
+window.stocks = stocks;
 function getSignal(s){
  if(s.K>=80) return {text:'要賣',cls:'badge-sell',emoji:'🔴',desc:`K=${s.K} 過熱`};
  if(s.K<=20) return {text:'要買',cls:'badge-buy',emoji:'🟢',desc:`K=${s.K} 超跌`};
@@ -171,7 +173,9 @@ document.getElementById('btnSell').onclick=()=>{filterMode='sell'; renderTables(
 document.getElementById('btnBuy').onclick=()=>{filterMode='buy'; renderTables();};
 document.getElementById('btnAll').onclick=()=>{filterMode='all'; renderTables();};
 document.getElementById('lastUpdate').textContent=new Date().toLocaleString('zh-TW');
-renderTables(); buildKDChart(currentStock); buildBubble();
+try{renderTables();}catch(e){console.error(e);}
+try{buildKDChart(currentStock);}catch(e){console.error('KD chart',e); document.getElementById('kdChart').parentElement.innerHTML+='<p class=\'text-red-400 text-xs\'>圖表載入失敗，請檢查網路</p>';}
+try{buildBubble();}catch(e){console.error(e);}
 </script>
 <script>
 
@@ -193,9 +197,9 @@ function requestPushPermission(){
 }
 
 function testPush(){
-  const stocks = window.stocks || [];
-  const sell = stocks.filter(s=>s.K>=80);
-  const buy = stocks.filter(s=>s.K<=20);
+  const allStocks = (typeof stocks!=='undefined'?stocks: (window.stocks||[]));
+  const sell = allStocks.filter(s=>s.K>=80);
+  const buy = allStocks.filter(s=>s.K<=20);
   const body = `🔴賣區 ${sell.length}檔 | 🟢買區 ${buy.length}檔\n${sell.slice(0,2).map(s=>s.code+'要賣').join(' ')} ${buy.slice(0,2).map(s=>s.code+'要買').join(' ')}`;
   new Notification('富邦新店 782E 0830推播測試', {body, icon:'https://cdn-icons-png.flaticon.com/512/138/138570.png'});
 }
