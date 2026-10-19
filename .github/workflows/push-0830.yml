@@ -1,0 +1,63 @@
+name: 0830 雙Token全自動推播-寫死保證推
+
+on:
+  schedule:
+    - cron: '30 0 * * 1-5'  # 台北 08:30
+  workflow_dispatch:
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 真實FinMind推播-保證推
+        run: |
+          python3 - << 'PY'
+          import requests, datetime
+          BOT_TOKEN = "8857921104:AAFcZoUET_2dOMp6CvotAkrl6c7icO7zn9Y"
+          FINMIND_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiazI2Y2FyQGdtYWlsLmNvbSIsImVtYWlsIjoiazI2Y2FyQGdtYWlsLmNvbSIsInRva2VuX3ZlcnNpb24iOjB9.sgTD3UjMOC_fjPjwE2RS5971JIAkjC3RztSQTJBrAys"
+          
+          # === CHAT_ID 三重保障 ===
+          # 1. 優先寫死的 (你從瀏覽器抓到的id填這裡)
+          HARDCODED_CHAT_ID = ""  # 例如 "1234567890"
+          
+          # 2. 自動抓最新的
+          CHAT_ID = HARDCODED_CHAT_ID
+          if not CHAT_ID:
+              try:
+                  r = requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/getUpdates", timeout=15)
+                  data = r.json()
+                  if data.get('result'):
+                      CHAT_ID = data['result'][-1]['message']['chat']['id']
+                      print(f"自動抓到 CHAT_ID: {CHAT_ID}")
+              except Exception as e:
+                  print(f"自動抓取失敗: {e}")
+          
+          if not CHAT_ID:
+              print("❌ 抓不到CHAT_ID")
+              print("請去瀏覽器開: https://api.telegram.org/bot8857921104:AAFcZoUET_2dOMp6CvotAkrl6c7icO7zn9Y/getUpdates")
+              print("先去 @My_fubon782_bot 發hi，再重新整理，會看到 id，填到 YML 的 HARDCODED_CHAT_ID")
+              exit(0)
+
+          # 真實FinMind 21檔
+          stocks = ["2357","3013","3293","2002","8046","3037","3163","3645","2330","2454","7769","2449","3665","2344","2408","2481","6669","3231","6139","3017","6805"]
+          lines = []
+          for sid in stocks[:15]:
+              try:
+                  url = f"https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockPrice&data_id={sid}&start_date=2026-10-01&token={FINMIND_TOKEN}"
+                  resp = requests.get(url, timeout=12).json()
+                  d = resp.get('data', [])
+                  if d:
+                      last = d[-1]
+                      lines.append(f"{sid} {last['close']}")
+              except Exception as e:
+                  print(f"{sid} {e}")
+
+          today = datetime.datetime.now().strftime('%m/%d %H:%M')
+          msg = f"📈 富邦782E {today} 真實FinMind\n"
+          msg += f"抱好/觀望/調節/快賣/快撿\n\n"
+          msg += "\n".join(lines)
+          msg += f"\n\n完整版: https://k26car-spec.github.io/test_APP/"
+
+          res = requests.post(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage", json={"chat_id": CHAT_ID, "text": msg}, timeout=15)
+          print(f"推播結果: {res.text}")
+          PY
