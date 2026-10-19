@@ -1,0 +1,43 @@
+name: Fubon 782E Real Push 6.2 Final
+
+on:
+  schedule:
+    - cron: '30 0 * * 1-5'  # 台北08:30 = UTC 00:30 週一到週五
+  workflow_dispatch:
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install deps
+        run: |
+          pip install requests pandas
+
+      - name: Delete old webhook and get Chat ID
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          echo "Cleaning webhook..."
+          curl -s "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/deleteWebhook?drop_pending_updates=true"
+          echo ""
+          echo "Trying getUpdates..."
+          curl -s "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates" | head -c 500
+          echo ""
+
+      - name: Run Fubon Push
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
+        run: |
+          python fubon_push.py
+
