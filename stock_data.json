@@ -1,111 +1,111 @@
 {
-  "lastUpdate": "2026/10/29 06:09:46",
-  "totalCapital": 445797.5,
+  "lastUpdate": "2026/10/30 06:09:36",
+  "totalCapital": 431576.65,
   "stocks": [
     {
       "code": "2330",
-      "price": 2415.0,
-      "K": 36.1,
-      "D": 23.6,
+      "price": 2370.0,
+      "K": 28.5,
+      "D": 25.2,
       "vol": 5840,
-      "chip": "青柱",
-      "ctrl": 1,
-      "trend": "吸籌中",
-      "marketVal": 141036.0
+      "chip": "紅柱",
+      "ctrl": 3,
+      "trend": "吸籌積極",
+      "marketVal": 138408.0
     },
     {
       "code": "2454",
-      "price": 4045.0,
-      "K": 28.1,
-      "D": 17.7,
+      "price": 3915.0,
+      "K": 26.0,
+      "D": 20.4,
       "vol": 3210,
       "chip": "紅柱",
       "ctrl": 3,
       "trend": "吸籌積極",
-      "marketVal": 129844.5
+      "marketVal": 125671.5
     },
     {
       "code": "2317",
-      "price": 248.0,
-      "K": 70.5,
-      "D": 60.1,
+      "price": 245.5,
+      "K": 64.2,
+      "D": 61.4,
       "vol": 4920,
-      "chip": "白柱",
-      "ctrl": 0,
-      "trend": "洗盤",
-      "marketVal": 12201.6
+      "chip": "青柱",
+      "ctrl": 1,
+      "trend": "吸籌中",
+      "marketVal": 12078.6
     },
     {
       "code": "2412",
-      "price": 158.0,
-      "K": 84.3,
-      "D": 87.6,
+      "price": 160.0,
+      "K": 89.6,
+      "D": 88.3,
       "vol": 2980,
       "chip": "藍柱",
       "ctrl": -2,
       "trend": "高位出貨",
-      "marketVal": 4708.4
+      "marketVal": 4768.0
     },
     {
       "code": "2881",
-      "price": 162.0,
-      "K": 66.8,
-      "D": 61.0,
+      "price": 161.5,
+      "K": 70.0,
+      "D": 64.0,
       "vol": 3850,
       "chip": "青柱",
       "ctrl": 1,
       "trend": "吸籌中",
-      "marketVal": 6237.0
+      "marketVal": 6217.75
     },
     {
       "code": "2303",
-      "price": 115.5,
-      "K": 12.3,
-      "D": 11.5,
+      "price": 111.5,
+      "K": 14.2,
+      "D": 12.4,
       "vol": 4120,
       "chip": "黄金柱",
       "ctrl": 5,
       "trend": "強吸+放量",
-      "marketVal": 4758.6
+      "marketVal": 4593.8
     },
     {
       "code": "2609",
-      "price": 62.0,
-      "K": 28.8,
-      "D": 36.4,
+      "price": 63.5,
+      "K": 39.4,
+      "D": 37.4,
       "vol": 3200,
-      "chip": "紅柱",
-      "ctrl": 3,
-      "trend": "吸籌積極",
-      "marketVal": 1984.0
+      "chip": "青柱",
+      "ctrl": 1,
+      "trend": "吸籌中",
+      "marketVal": 2032.0
     },
     {
       "code": "2882",
-      "price": 116.5,
-      "K": 63.1,
-      "D": 54.8,
+      "price": 116.0,
+      "K": 68.7,
+      "D": 59.4,
       "vol": 3500,
       "chip": "青柱",
       "ctrl": 1,
       "trend": "吸籌中",
-      "marketVal": 4077.5
+      "marketVal": 4060.0
     },
     {
       "code": "2891",
-      "price": 75.3,
-      "K": 71.6,
-      "D": 75.2,
+      "price": 75.8,
+      "K": 74.3,
+      "D": 74.9,
       "vol": 4000,
       "chip": "白柱",
       "ctrl": 0,
       "trend": "洗盤",
-      "marketVal": 3012.0
+      "marketVal": 3032.0
     },
     {
       "code": "2382",
       "price": 318.0,
-      "K": 50.4,
-      "D": 53.0,
+      "K": 44.7,
+      "D": 50.2,
       "vol": 3100,
       "chip": "青柱",
       "ctrl": 1,
@@ -114,91 +114,91 @@
     },
     {
       "code": "2308",
-      "price": 1480.0,
-      "K": 15.5,
-      "D": 11.5,
+      "price": 1335.0,
+      "K": 10.4,
+      "D": 11.1,
       "vol": 1200,
       "chip": "黄金柱",
       "ctrl": 5,
       "trend": "強吸+放量",
-      "marketVal": 17760.0
+      "marketVal": 16020.0
     },
     {
       "code": "3711",
-      "price": 683.0,
-      "K": 49.2,
-      "D": 37.2,
+      "price": 668.0,
+      "K": 50.1,
+      "D": 41.5,
       "vol": 2800,
       "chip": "青柱",
       "ctrl": 1,
       "trend": "吸籌中",
-      "marketVal": 19124.0
+      "marketVal": 18704.0
     },
     {
       "code": "2887",
-      "price": 42.4,
-      "K": 59.9,
-      "D": 52.4,
+      "price": 42.25,
+      "K": 62.5,
+      "D": 55.8,
       "vol": 3600,
       "chip": "青柱",
       "ctrl": 1,
       "trend": "吸籌中",
-      "marketVal": 1526.4
+      "marketVal": 1521.0
     },
     {
       "code": "3037",
-      "price": 1040.0,
-      "K": 19.4,
-      "D": 21.4,
+      "price": 989.0,
+      "K": 17.5,
+      "D": 20.1,
       "vol": 3000,
       "chip": "黄金柱",
       "ctrl": 5,
       "trend": "強吸+放量",
-      "marketVal": 31200.0
+      "marketVal": 29670.0
     },
     {
       "code": "3034",
-      "price": 596.0,
-      "K": 80.3,
-      "D": 80.4,
+      "price": 575.0,
+      "K": 62.4,
+      "D": 74.4,
       "vol": 3200,
-      "chip": "藍柱",
-      "ctrl": -2,
-      "trend": "高位出貨",
-      "marketVal": 19072.0
+      "chip": "青柱",
+      "ctrl": 1,
+      "trend": "吸籌中",
+      "marketVal": 18400.0
     },
     {
       "code": "6770",
-      "price": 69.5,
-      "K": 60.4,
-      "D": 46.8,
+      "price": 66.6,
+      "K": 52.3,
+      "D": 48.6,
       "vol": 2000,
       "chip": "青柱",
       "ctrl": 1,
       "trend": "吸籌中",
-      "marketVal": 1390.0
+      "marketVal": 1332.0
     },
     {
       "code": "2368",
-      "price": 1115.0,
-      "K": 29.1,
-      "D": 31.9,
+      "price": 1020.0,
+      "K": 21.3,
+      "D": 28.4,
       "vol": 2800,
       "chip": "紅柱",
       "ctrl": 3,
       "trend": "吸籌積極",
-      "marketVal": 31220.0
+      "marketVal": 28560.0
     },
     {
       "code": "8081",
-      "price": 271.5,
-      "K": 69.3,
-      "D": 60.5,
+      "price": 266.0,
+      "K": 61.3,
+      "D": 60.7,
       "vol": 2500,
       "chip": "青柱",
       "ctrl": 1,
       "trend": "吸籌中",
-      "marketVal": 6787.5
+      "marketVal": 6650.0
     }
   ],
   "fubonGuard": [
