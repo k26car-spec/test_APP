@@ -3,7 +3,7 @@ import os, requests, pandas as pd
 from datetime import datetime, timedelta
 
 # ========= 設定 =========
-BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "8857921104:AAHyDeHZyehirLrIvBhMgRjTw_3KdzWw0QY")
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
 CHAT_ID_ENV = os.getenv("TELEGRAM_CHAT_ID", "")
 FINMIND_TOKEN = os.getenv("FINMIND_TOKEN", "")
 

@@ -11,8 +11,8 @@ jobs:
     steps:
       - name: Push to Telegram
         env:
-          BOT_TOKEN: "8857921104:AAFcZoUET_2dOMp6CvotAkrl6c7icO7zn9Y"
-          FINMIND_TOKEN: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiazI2Y2FyQGdtYWlsLmNvbSIsImVtYWlsIjoiazI2Y2FyQGdtYWlsLmNvbSIsInRva2VuX3ZlcnNpb24iOjB9.sgTD3UjMOC_fjPjwE2RS5971JIAkjC3RztSQTJBrAys"
+          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
         run: |
           echo "=== 抓 CHAT_ID ==="
           UPDATES=$(curl -s "https://api.telegram.org/bot${BOT_TOKEN}/getUpdates")

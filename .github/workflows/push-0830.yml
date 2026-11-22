@@ -10,12 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 真實FinMind推播-保證推
+        env:
+          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          FINMIND_TOKEN: ${{ secrets.FINMIND_TOKEN }}
         run: |
           python3 - << 'PY'
-          import requests, datetime
-          BOT_TOKEN = "8857921104:AAFcZoUET_2dOMp6CvotAkrl6c7icO7zn9Y"
-          FINMIND_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiazI2Y2FyQGdtYWlsLmNvbSIsImVtYWlsIjoiazI2Y2FyQGdtYWlsLmNvbSIsInRva2VuX3ZlcnNpb24iOjB9.sgTD3UjMOC_fjPjwE2RS5971JIAkjC3RztSQTJBrAys"
-          
+          import requests, datetime, os
+          BOT_TOKEN = os.environ["BOT_TOKEN"]
+          FINMIND_TOKEN = os.environ["FINMIND_TOKEN"]
+
           # === CHAT_ID 三重保障 ===
           # 1. 優先寫死的 (你從瀏覽器抓到的id填這裡)
           HARDCODED_CHAT_ID = ""  # 例如 "1234567890"
@@ -34,7 +37,7 @@ jobs:
           
           if not CHAT_ID:
               print("❌ 抓不到CHAT_ID")
-              print("請去瀏覽器開: https://api.telegram.org/bot8857921104:AAFcZoUET_2dOMp6CvotAkrl6c7icO7zn9Y/getUpdates")
+              print(f"請去瀏覽器開: https://api.telegram.org/bot{BOT_TOKEN}/getUpdates")
               print("先去 @My_fubon782_bot 發hi，再重新整理，會看到 id，填到 YML 的 HARDCODED_CHAT_ID")
               exit(0)
 
